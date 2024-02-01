@@ -1,0 +1,106 @@
+.header{
+    background: #262626;
+    position: sticky;
+    top: 0;
+    padding: 15px 0px;
+    z-index: 999;
+}
+
+.header .inner-logo a{
+    color: #fff;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+/* sider */
+.body .sider{
+    width: 150px;
+    height: calc(100vh - 65px);
+    position: fixed;
+    left: 0px;
+    top: 65px;
+    background-color: #333333;
+}
+
+.body .sider ul{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0;
+}
+
+.body .sider ul li a{
+    color: #fff;
+    padding: 10px;
+    display: block;
+    border-bottom: 1px solid #515151;
+    text-decoration: none;
+}
+
+.body .sider ul li a:hover{
+    color: #acacac;
+}
+
+/* main */
+.body .main{
+    position: relative;
+    left: 150px;
+    margin: 15px;
+    width: calc(100% - 170px);
+}
+
+/* alert */
+[show-alert]
+{
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    width: auto;
+    z-index: 999;
+}
+
+[show-alert].hidden-alert{
+    animation-name: hidden-alert;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+@keyframes hidden-alert{
+    from{
+        right: 15px;
+    }
+    to{
+        right: -100%;
+        display: none;
+    }
+}
+
+[close-alert]{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #fff;
+    border-radius: 50%;
+}
+
+[close-alert]:hover{
+    font-weight: 700;
+    cursor: pointer;;
+}
+
+/* preview image */
+[image-preview-see]{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+[image-preview-see][src=""]{
+    display: none;
+}
+/* preview image */
