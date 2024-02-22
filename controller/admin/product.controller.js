@@ -31,10 +31,22 @@ module.exports.index = async (req, res) => {
         const objectPagination = paginationHelper(5, req.query, countProducts);
         //pagination
 
+        // sort
+        const sort = {};
+        if(req.query.sortKey && req.query.sortValue)
+        {
+            sort[req.query.sortKey] = req.query.sortValue;
+        }
+        else
+        {
+            sort["position"] = "desc";
+        }
+        // sort
+
         const products = await Product.find(find)
             .limit(objectPagination.limitItem)
             .skip(objectPagination.skip)
-            .sort({position : "desc"});
+            .sort(sort);
     
         res.render("admin/pages/product/index.pug", {
             title: "Trang danh sách sản phẩm",
@@ -154,10 +166,10 @@ module.exports.createPOST = async(req, res) => {
     {
         req.body.position = parseInt(req.body.position);
     }
-    if(req.file && req.file.filename)
-    {
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
+    // if(req.file && req.file.filename)
+    // {
+    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // }
     const product = new Product(req.body);
     product.save();
     res.redirect("/admin/products");
