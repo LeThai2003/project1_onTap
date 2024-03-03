@@ -172,6 +172,9 @@ module.exports.createPOST = async(req, res) => {
     // }
     const product = new Product(req.body);
     product.save();
+
+    req.flash("success", "Thêm mới sản phẩm thành công");
+
     res.redirect("/admin/products");
 }
 
