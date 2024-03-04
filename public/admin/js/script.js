@@ -256,3 +256,59 @@ if(sort)
 }
 //sort select option
 
+//----permission---
+const tablePermission = document.querySelector("[table-permission]");
+if(tablePermission)
+{
+    const buttonSubmit = document.querySelector("[button-submit]");
+    buttonSubmit.addEventListener("click", () => {
+        const roles = [];   
+        const rows = tablePermission.querySelectorAll("[data-name]");
+        rows.forEach(row => {
+            const name = row.getAttribute("data-name");
+            const inputs = row.querySelectorAll("input"); // qua moi hang thi lay cac input cua hang do
+            if(name == "id") // neu la hang dau tien id
+            {
+                inputs.forEach(input => {
+                    const id = input.value;
+                    roles.push({
+                        id: id,
+                        permissions: []
+                    });
+                });
+            }
+            else // các hàng tiếp theo-> input(checkbox).. nếu input ở vị trí index nào chẹcked thì push vào roles
+            {
+                inputs.forEach((input, index) => {
+                    if(input.checked)
+                    {
+                        roles[index].permissions.push(name);
+                    }
+                });
+            }
+        });
+        const formChangePermissions = document.querySelector("[form-change-permissions]");
+        const inputPermissions = formChangePermissions.querySelector("input[name='roles']");
+        inputPermissions.value = JSON.stringify(roles); 
+        formChangePermissions.submit();
+    });
+
+    // default value 
+    const divData = document.querySelector("[divData]");
+    if(divData)
+    {
+        const datas = JSON.parse(divData.getAttribute("divData"))  // mảng roles -> lấy từng record
+        datas.forEach((data, index) => {
+            const permissions = data.permissions;  // trong từng record -> lấy mảng permissions
+            permissions.forEach(permission => {  // trong mảng permissions -> lấy ra từng quyền 
+                const row = tablePermission.querySelector(`[data-name='${permission}']`); // tìm tới row quyền đó
+                const inputs = row.querySelectorAll("input");
+                console.log(inputs);
+                inputs[index].checked = true;  // chắc chắn input checkbox sẽ checked = true theo index
+            })
+        });
+    }
+
+}
+//----end permission---
+
