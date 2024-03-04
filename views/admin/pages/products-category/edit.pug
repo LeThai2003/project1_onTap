@@ -3,14 +3,14 @@ include ../../mixins/show-alert.pug
 include ../../mixins/select-tree.pug 
 
 block main 
-    h1(class="mb-4") Thêm mới danh mục sản phẩm 
+    h1(class="mb-4") Chỉnh sửa danh mục sản phẩm 
 
     +alert-success(5000)
     +alert-error(5000)
 
     form(
-        action=`/${prefixAdmin}/products-category/create`, 
-        method="post"
+        action=`/${prefixAdmin}/products-category/edit/${data.id}?_method=PATCH`, 
+        method="POST"
         enctype="multipart/form-data"
     ) 
         div(class="form-group")
@@ -21,6 +21,7 @@ block main
                 id="tilte"
                 name="title"
                 required
+                value= data.title
             )
         div(class="form-group")
             label(for="parent_id") Danh mục cha 
@@ -31,7 +32,7 @@ block main
             ) 
                 option(value="") -- Chọn danh mục cha -- 
                 if(records)
-                    +select-tree(records)
+                    +select-tree(records, 1, data.parent_id)
         div(class="form-group")
             label(for="desc") Mô tả
             textarea(
@@ -40,7 +41,7 @@ block main
                 name="description"
                 rows="5"
                 textarea-mce 
-            )
+            ) #{data.description}
         div(class="form-group" image-preview)
             label(for="thumbnail") Ảnh
             input(
@@ -52,8 +53,8 @@ block main
                 image-preview-input
             )
             img(
-                src="", 
-                alt=""
+                src=data.thumbnail, 
+                alt=data.title
                 image-preview-see 
             )
         div(class="form-group")
@@ -65,6 +66,7 @@ block main
                 name="position"
                 placeholder="Tự động tăng"
                 min="1"
+                value=data.position 
             )
         div(class="form-group form-check form-check-inline")
             input(
@@ -73,7 +75,7 @@ block main
                 id="statusActive"
                 name="status"
                 value="active"
-                checked
+                checked=(data.status == "active" ? true : false)
             )
             label(for="statusActive" class="form-check-label") Hoạt động
         div(class="form-group form-check form-check-inline")
@@ -83,10 +85,11 @@ block main
                 id="statusInActive"
                 name="status"
                 value="inactive"
+                checked=(data.status == "inactive" ? true : false)
             )
             label(for="statusInActive" class="form-check-label") Dừng hoạt động
         div(class="form-group")
             button(
                 type="submit"
                 class="btn btn-primary"
-            ) Tạo mới
+            ) Cập nhật
