@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     title: String,
+    products_category_id: {
+        type: String,
+        default: ""
+    },
     description: String,
     price: Number,
     discountPercentage: Number,

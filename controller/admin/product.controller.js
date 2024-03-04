@@ -1,6 +1,8 @@
 const Product = require("../../model/product.model");
+const ProductCategory = require("../../model/product-category.model");
 const paginationHelper = require("../../helper/pagination.helper");
 const filterStatusHelper = require("../../helper/filterStatus");
+const createTreeHelper = require("../../helper/create-tree.helper")
 
 //[GET]/admin/products
 module.exports.index = async (req, res) => {
@@ -143,8 +145,15 @@ module.exports.deleteOne = async(req, res) => {
 
 //[GET]/admin/products/create
 module.exports.create = async(req, res) => {
+    const records = await ProductCategory.find({
+        deleted: false
+    });
 
-    res.render("admin/pages/product/create");
+    const newRecords = createTreeHelper(records);
+
+    res.render("admin/pages/product/create", {
+        records: newRecords
+    });
 }
 
 //[POST]/admin/products/create
