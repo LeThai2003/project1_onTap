@@ -49,3 +49,42 @@ module.exports.createPost =async (req, res) => {
 
     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
 }
+
+//[GET]/admin/accounts/edit/:id
+module.exports.edit =async (req, res) => {
+    const data = await Account.findOne({
+        _id: req.params.id,
+    }).select("-password");
+
+    const roles = await Role.find({
+        deleted: false,
+    });
+
+
+    res.render("admin/pages/accounts/edit", {
+        title: "Cập nhật tài khoản",
+        data: data, 
+        roles: roles,
+    });
+}
+
+//[PATCH]/admin/accounts/edit/:id
+module.exports.editPatch =async (req, res) => {
+    console.log(req.params.id);
+    const id = req.params.id;
+    if(req.body.password)
+    {
+        req.body.password = md5(req.body.password);
+    }
+    else // case pass = ""
+    {
+        delete req.body.password;
+    }
+    console.log(req.body);
+    await Account.updateOne({
+        _id: id, 
+    }, req.body );
+
+    res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+}
+
