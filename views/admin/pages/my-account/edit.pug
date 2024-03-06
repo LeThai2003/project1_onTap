@@ -1,0 +1,70 @@
+extends ../../layouts/default 
+include ../../mixins/show-alert 
+
+block main 
+    h1(class="mb-3") #{title}
+
+    +alert-success(4000)
+    +alert-error(4000)
+
+    form(
+        action=`/${prefixAdmin}/my-account/edit?_method=PATCH`
+        method="post"
+        enctype="multipart/form-data"
+    ) 
+        div(class="form-group")
+            label(for="fullname") Họ tên *
+            input(
+                type="text"
+                class="form-control"
+                id="fullname"
+                name="fullname"
+                required
+                value= user.fullname 
+            )
+        div(class="form-group")
+            label(for="email") Email *
+            input(
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                required
+                value= user.email 
+            )
+        div(class="form-group")
+            label(for="password") Mật khẩu 
+            input(
+                type="text"
+                class="form-control"
+                id="password"
+                name="password"
+            )
+        div(class="form-group")
+            label(for="phone") Số điện thoại 
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value=user.phone 
+            )
+        div(class="form-group" image-preview)
+            label(for="avatar") Avatar
+            input(
+                type="file"
+                class="form-control-file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                image-preview-input
+            )
+            img(
+                src=user.avatar, 
+                alt=user.fullname 
+                image-preview-see 
+            )
+        button(
+            type="submit"
+            class="btn btn-primary"
+        ) Cập nhật 

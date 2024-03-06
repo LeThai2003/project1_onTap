@@ -246,10 +246,18 @@ module.exports.editPATCH = async(req, res) => {
         req.body.thumbnail = `/uploads/${req.file.filename}`;
         }
 
+        const objectUpdate = {
+            accountId: res.locals.user.id,
+            updateAt: new Date(),
+        }
+
         await Product.updateOne({
             _id : id,
             deleted: false
-        }, req.body);
+        }, {
+            ...req.body,
+            $push: {updateBy: objectUpdate}
+        });
         
         req.flash("success", "Cập nhật sản phẩm thành công");
         res.redirect("back");
