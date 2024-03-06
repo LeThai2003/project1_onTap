@@ -1,4 +1,5 @@
 const Product = require("../../model/product.model");
+const Account = require("../../model/account.model");
 const ProductCategory = require("../../model/product-category.model");
 const paginationHelper = require("../../helper/pagination.helper");
 const filterStatusHelper = require("../../helper/filterStatus");
@@ -50,6 +51,18 @@ module.exports.index = async (req, res) => {
             .skip(objectPagination.skip)
             .sort(sort);
     
+        for (const product of products) {
+            const account = await Account.findOne({
+                _id: product.createdBy.accountId,
+            });
+
+            console.log(account);
+            if(account)
+            {
+                product.createdBy.fullname = account.fullname;
+            }
+        }
+
         res.render("admin/pages/product/index.pug", {
             title: "Trang danh sách sản phẩm",
             pageTitle: "Danh sách sản phẩm",
@@ -102,7 +115,11 @@ module.exports.changeMulti = async(req, res) => {
             await Product.updateMany({
                 _id : {$in : ids}
             }, {
-                deleted : true
+                deleted : true,
+                deletedBy: {
+                    accountId: res.locals.user.id,
+                    deleteAt: Date.now(),
+                }
             });
             req.flash('success', 'Xóa sản phẩm thành công');
             break;
@@ -134,7 +151,11 @@ module.exports.deleteOne = async(req, res) => {
         await Product.updateOne({
             _id : id
         }, {
-            deleted : true
+            deleted : true,
+            deletedBy: {
+                accountId: res.locals.user.id,
+                deleteAt: Date.now(),
+            }
         });        
     } catch (error) {
         console.log(error)
@@ -179,6 +200,12 @@ module.exports.createPOST = async(req, res) => {
     // {
     //     req.body.thumbnail = `/uploads/${req.file.filename}`;
     // }
+
+    req.body.createdBy = {
+        accountId: res.locals.user.id,
+        createAt: Date.now(),
+    }
+
     const product = new Product(req.body);
     product.save();
 

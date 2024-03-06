@@ -29,25 +29,32 @@ module.exports.create = async (req, res) => {
 
 //[POST]/admin/products-category/create
 module.exports.createPost = async (req, res) => {
-    console.log(req.body);
-    if(req.body.position == "")
+
+    if(res.locals.role.permissions.includes("products-category_create"))
     {
-        const countProductCategory = await ProductCategory.countDocuments({
-            deleted: false 
-        });
-        req.body.position = countProductCategory + 1;
+        if(req.body.position == "")
+        {
+            const countProductCategory = await ProductCategory.countDocuments({
+                deleted: false 
+            });
+            req.body.position = countProductCategory + 1;
+        }
+        else
+        {
+            req.body.position = parseInt(req.body.position);
+        }
+
+        const record = new ProductCategory(req.body);
+        await record.save();
+
+        req.flash("success", "Thêm mới mục sản phẩm thành công");
+
+        res.redirect(`/${SystemConfig.prefixAdmin}/products-category`);
     }
     else
     {
-        req.body.position = parseInt(req.body.position);
+        res.send("404");
     }
-
-    const record = new ProductCategory(req.body);
-    await record.save();
-
-    req.flash("success", "Thêm mới mục sản phẩm thành công");
-
-    res.redirect(`/${SystemConfig.prefixAdmin}/products-category`);
 };
 
 //[GET]/admin/products-category/edit/:id
@@ -74,25 +81,31 @@ module.exports.edit = async (req, res) => {
 
 //[PATCH]/admin/products-category/edit/:id
 module.exports.editPatch = async (req, res) => {
-    console.log(req.body);
-    if(req.body.position == "")
+    if(res.locals.role.permissions.includes("products-category_edit"))
     {
-        const countProductCategory = await ProductCategory.countDocuments({
-            deleted: false 
-        });
-        req.body.position = countProductCategory + 1;
+        if(req.body.position == "")
+        {
+            const countProductCategory = await ProductCategory.countDocuments({
+                deleted: false 
+            });
+            req.body.position = countProductCategory + 1;
+        }
+        else
+        {
+            req.body.position = parseInt(req.body.position);
+        }
+
+        await ProductCategory.updateOne({
+            _id: req.params.id,
+            deleted: false
+        },req.body);
+
+        req.flash("success", "Chỉnh sửa danh mục sản phẩm thành công");
+
+        res.redirect(`back`);
     }
     else
     {
-        req.body.position = parseInt(req.body.position);
+        res.send("404");
     }
-
-    await ProductCategory.updateOne({
-        _id: req.params.id,
-        deleted: false
-    },req.body);
-
-    req.flash("success", "Chỉnh sửa danh mục sản phẩm thành công");
-
-    res.redirect(`back`);
 };
