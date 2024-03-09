@@ -39,7 +39,8 @@ const productSchema = new mongoose.Schema({
     deletedBy:{
         accountId: String,
         deleteAt: Date,
-    }
+    },
+    featured: String,
 },{ timestamps: true });
 
 const Product = mongoose.model("Product", productSchema, "products");

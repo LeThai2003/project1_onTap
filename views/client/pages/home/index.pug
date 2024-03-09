@@ -1,4 +1,51 @@
 extends ../../layouts/default.pug 
+include ../../mixins/box-head.pug
 
 block main 
-    h1 Home 
+    .section-products-featured(class="mb-3")
+        .container 
+            .row 
+                .col-12 
+                    +box-head("Sản phẩm nổi bật")
+            .row 
+                if(productsFeatured.length > 0)
+                    each item in productsFeatured
+                        .col-4.mb-3 
+                            .product-item 
+                                .inner-image 
+                                    a(href=`/products/detail/${item.slug}`) 
+                                        img(src=item.thumbnail, alt=item.title)
+                                .inner-content 
+                                    a(href=`/products/detail/${item.slug}`) 
+                                        h3.inner-title #{item.title}
+                                    .inner-price-new #{item.priceNew}$
+                                    .inner-price-old #{item.price}$
+                                    .inner-discount -#{item.discountPercentage}%
+                else 
+                    .col-12 
+                        div(class="text-center") Không có sản phẩm để hiển thị 
+        
+    .section-products-featured(class="mb-3")
+        .container 
+            .row 
+                .col-12 
+                    +box-head("Sản phẩm mới nhất")
+            .row 
+                if(newProducts.length > 0)
+                    each item in newProducts
+                        .col-4.mb-3 
+                            .product-item 
+                                .inner-image 
+                                    a(href=`/products/detail/${item.slug}`) 
+                                        img(src=item.thumbnail, alt=item.title)
+                                .inner-content 
+                                    a(href=`/products/detail/${item.slug}`) 
+                                        h3.inner-title #{item.title}
+                                    .inner-price-new #{item.priceNew}$
+                                    .inner-price-old #{item.price}$
+                                    .inner-discount -#{item.discountPercentage}%
+
+                else 
+                    .col-12 
+                        div(class="text-center") Không có sản phẩm để hiển thị 
+
