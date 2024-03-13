@@ -43,3 +43,27 @@ module.exports.login = (req, res, next) => {
 
     next();
 }
+
+module.exports.forgotPassword = (req, res, next) => {
+
+    if(!req.body.email)
+    {
+        req.flash("error", "Email không được để trống!");
+        res.redirect("back");
+        return;
+    }
+    
+    next();
+}
+
+module.exports.otpPassword = (req, res, next) => {
+
+    if(!req.body.otp)
+    {
+        req.flash("error", "OTP không được để trống!");
+        res.redirect("back");
+        return;
+    }
+    
+    next();
+}

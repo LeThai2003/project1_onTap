@@ -21,4 +21,12 @@ router.post(
 
 router.get("/logout", controller.logout);
 
+router.get("/password/forgot", controller.forgotPassword);
+
+router.post("/password/forgot", validate.forgotPassword, controller.forgotPasswordPost);
+
+router.get("/password/otp", controller.otpPassword);
+
+router.post("/password/otp", validate.otpPassword, controller.otpPasswordPost);
+
 module.exports = router;
