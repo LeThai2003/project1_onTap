@@ -141,7 +141,7 @@ module.exports.otpPassword = async (req, res) => {
     const email = req.query.email;
   
     res.render("client/pages/user/otp-password", {
-      pageTitle: "Nhập mã OTP",
+      title: "Nhập mã OTP",
       email: email,
     });
 };
@@ -171,4 +171,25 @@ module.exports.otpPasswordPost = async (req, res) => {
     res.cookie("tokenUser", user.tokenUser);
 
     res.redirect(`/user/password/reset`);
+};
+
+//[GET]user/password/reset
+module.exports.resetPassword = async (req, res) =>{ 
+    res.render("client/pages/user/reset-password", {
+      title: "Tạo mật khẩu mới",
+    });
+};
+
+//[GET]user/password/reset
+module.exports.resetPasswordPost = async (req, res) =>{ 
+    const tokenUser = req.cookies.tokenUser;
+    const newPassword = req.body.password;
+
+    await User.updateOne({
+        tokenUser: tokenUser,
+    }, {
+        password: md5(newPassword),
+    })
+
+    res.redirect("/");
 };
