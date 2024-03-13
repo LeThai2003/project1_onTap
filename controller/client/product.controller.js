@@ -43,7 +43,7 @@ module.exports.detailProduct = async (req, res) => {
         product.category = category;
     }
 
-    console.log(product);
+    // console.log(product);
 
     res.render("client/pages/product/detail", {
         title: "Trang chi tiết sản phẩm",
@@ -60,7 +60,7 @@ module.exports.category = async (req, res) => {
         status: "active",
     });
 
-    console.log(category);
+    // console.log(category);
 
     const getSubCategorys = async(parentId) => {
         // lay ra cac con cua category co id la parentId
