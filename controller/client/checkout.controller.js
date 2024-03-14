@@ -63,6 +63,8 @@ module.exports.order = async(req, res) => {
             quantity: item.quantity,
         }
 
+        orderInfo.user_id = cart.user_id;
+
         orderInfo.products.push(infoProduct);
     }
 

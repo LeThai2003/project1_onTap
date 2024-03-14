@@ -2,6 +2,8 @@ const md5 = require("md5");
 const generateHelper = require("../../helper/generate.helper");
 const User = require("../../model/user.model");
 const ForgotPassword = require("../../model/forgotPassword.model");
+const mailHelper = require("../../helper/send-mail.helper"); 
+const Cart = require("../../model/cart.model");
 
 //[GET]/user/register
 module.exports.register = (req, res) => {
@@ -84,6 +86,12 @@ module.exports.loginPost = async (req, res) => {
 
     res.cookie("tokenUser", user.tokenUser);
 
+    await Cart.updateOne({
+        _id: req.cookies.cartId,
+    }, {
+        user_id: user.id,
+    });
+
     res.redirect("/");
 }
 
@@ -94,7 +102,7 @@ module.exports.logout = (req, res) => {
 }
 
 
-//[GET]/user/register
+//[GET]user/password/forgot
 module.exports.forgotPassword = (req, res) => {
 
     res.render("client/pages/user/forgot-password", {
@@ -102,7 +110,7 @@ module.exports.forgotPassword = (req, res) => {
     });
 }
 
-//[POST]/user/register
+//[POST]user/password/forgot
 module.exports.forgotPasswordPost = async (req, res) => {
 
     const email = req.body.email;
@@ -131,6 +139,10 @@ module.exports.forgotPasswordPost = async (req, res) => {
     await record.save();
 
     //---gui ma otp tu dong
+    const subject = `Mã OTP lấy lại lại mật khẩu`;
+    const content = `Mã OTP của bạn là <b>${otp}</b>. Vui lòng không chia sẻ với bất cứ ai.`;
+
+    mailHelper.sendMail(email, subject, content);
 
 
     res.redirect(`/user/password/otp?email=${email}`);
@@ -193,3 +205,10 @@ module.exports.resetPasswordPost = async (req, res) =>{
 
     res.redirect("/");
 };
+
+//[GET]user/info
+module.exports.info = async (req, res) => {
+    res.render("client/pages/user/info", {
+      pageTitle: "Thông tin tài khoản",
+    });
+  };

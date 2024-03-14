@@ -138,6 +138,17 @@ block main
                             td(class="text-center")
                                 input(type="checkbox")
                     //- Hết tai khoan
+
+                    //- cai dat chung
+                    tr 
+                        td(colspan="3") 
+                            b Tài khoản 
+                    tr(data-name="settings_view")
+                        td Xem/Sửa
+                        each item in records 
+                            td(class="text-center")
+                                input(type="checkbox")
+                    //- Hết cai dat chung
             
             form(
                 action=`/${prefixAdmin}/roles/permissions?_method=PATCH`

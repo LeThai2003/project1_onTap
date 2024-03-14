@@ -1,4 +1,9 @@
  /* --------HEADER------- */
+body{
+  height: 100vh;
+  position: relative;
+}
+
 .header
 {
     border-bottom: 1px solid #ddd;
@@ -35,6 +40,10 @@
     color: #fff;
     text-align: center;
     padding: 10px;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
  }
 
  /* --------BOX-HEAD------- */
